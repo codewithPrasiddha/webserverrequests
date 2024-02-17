@@ -73,22 +73,36 @@ module.exports.getCourses = function () {
 
 module.exports.getStudentByNum = function (num) {
     return new Promise(function (resolve, reject) {
-        var foundStudent = dataCollection.students.find(student => student.studentNum === num);
-        if (!foundStudent) {
-            reject("No student found with student number " + num);
-        } else {
-            resolve(foundStudent);
+        var foundStudent = null;
+
+        for (let i = 0; i < dataCollection.students.length; i++) {
+            if (dataCollection.students[i].studentNum == num) {
+                foundStudent = dataCollection.students[i];
+            }
         }
+
+        if (!foundStudent) {
+            reject("query returned 0 results"); return;
+        }
+
+        resolve(foundStudent);
     });
 };
 
 module.exports.getStudentsByCourse = function (course) {
     return new Promise(function (resolve, reject) {
-        var filteredStudents = dataCollection.students.filter(student => student.course === course);
-        if (filteredStudents.length === 0) {
-            reject("No students found for course " + course);
-        } else {
-            resolve(filteredStudents);
+        var filteredStudents = [];
+
+        for (let i = 0; i < dataCollection.students.length; i++) {
+            if (dataCollection.students[i].course == course) {
+                filteredStudents.push(dataCollection.students[i]);
+            }
         }
+
+        if (filteredStudents.length == 0) {
+            reject("query returned 0 results"); return;
+        }
+
+        resolve(filteredStudents);
     });
 };
