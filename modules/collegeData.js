@@ -1,5 +1,6 @@
 const fs = require("fs");
 
+//Managing data
 class Data {
     constructor(students, courses) {
         this.students = students;
@@ -9,6 +10,7 @@ class Data {
 
 let dataCollection = null;
 
+//Initializing the data module
 module.exports.initialize = function () {
     return new Promise((resolve, reject) => {
         fs.readFile('./data/courses.json', 'utf8', (err, courseData) => {
@@ -30,6 +32,7 @@ module.exports.initialize = function () {
     });
 }
 
+//Retrieving all students
 module.exports.getAllStudents = function () {
     return new Promise((resolve, reject) => {
         if (dataCollection.students.length == 0) {
@@ -41,6 +44,7 @@ module.exports.getAllStudents = function () {
     });
 }
 
+//Retrieving teaching assistants
 module.exports.getTAs = function () {
     return new Promise(function (resolve, reject) {
         var filteredStudents = [];
@@ -60,6 +64,7 @@ module.exports.getTAs = function () {
     });
 };
 
+//Retrieving all courses
 module.exports.getCourses = function () {
     return new Promise((resolve, reject) => {
         if (dataCollection.courses.length == 0) {
@@ -71,6 +76,7 @@ module.exports.getCourses = function () {
     });
 };
 
+//Retrieving a student by student number
 module.exports.getStudentByNum = function (num) {
     return new Promise(function (resolve, reject) {
         var foundStudent = null;
@@ -82,13 +88,15 @@ module.exports.getStudentByNum = function (num) {
         }
 
         if (!foundStudent) {
-            reject("query returned 0 results"); return;
+            reject("no results returned");
+            return;
         }
 
         resolve(foundStudent);
     });
 };
 
+//Retrieving students by course
 module.exports.getStudentsByCourse = function (course) {
     return new Promise(function (resolve, reject) {
         var filteredStudents = [];
@@ -100,7 +108,8 @@ module.exports.getStudentsByCourse = function (course) {
         }
 
         if (filteredStudents.length == 0) {
-            reject("query returned 0 results"); return;
+            reject("no results returned");
+            return;
         }
 
         resolve(filteredStudents);
